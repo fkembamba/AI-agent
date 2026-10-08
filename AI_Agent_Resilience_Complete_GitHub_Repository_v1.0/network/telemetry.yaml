@@ -1,0 +1,50 @@
+version: "1.0"
+
+telemetry:
+  timezone: UTC
+  clock_sync:
+    required: true
+    max_drift_ms: 500
+
+  sensors:
+    zeek01:
+      management_ip: 10.10.70.11
+      observation_point: perimeter
+      mirrored_boundary:
+        from: n0_external
+        to: n1_dmz
+      monitor_ip: null
+      promiscuous: true
+
+    zeek02:
+      management_ip: 10.10.70.12
+      observation_point: protected_boundary
+      mirrored_boundary:
+        from: n2_internal
+        to: n3_protected
+      monitor_ip: null
+      promiscuous: true
+
+    log01:
+      management_ip: 10.10.70.20
+      role: centralized_log_collection
+
+collection:
+  network_connections: true
+  dns: true
+  authentication: true
+  process_events: true
+  host_events: true
+  firewall_events: true
+  caldera_events: true
+  experiment_controller_events: true
+  ai_agent_events: true
+
+required_run_markers:
+  - run_id
+  - experiment_id
+  - architecture_profile
+  - attacker_configuration
+  - repetition
+  - t0_utc
+  - end_time_utc

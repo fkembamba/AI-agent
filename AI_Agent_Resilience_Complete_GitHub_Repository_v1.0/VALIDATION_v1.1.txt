@@ -1,0 +1,36 @@
+RVPI Cyber Range Network Config v1.1 validation
+YAML parse errors: 0
+Python compile return code: 0
+
+Smoke tests:
+- rc=0 /mnt/data/rvpi_cyber_range_config_v1.1/automation/rvpi-lab validate
+Validation: PASS
+Errors: 0  Warnings: 0
+- rc=0 /mnt/data/rvpi_cyber_range_config_v1.1/automation/rvpi-lab render-proxmox --out /mnt/data/rvpi_cyber_range_config_v1.1/automation/generated/proxmox-plan.yaml
+Wrote Proxmox NIC/bridge plan: /mnt/data/rvpi_cyber_range_config_v1.1/automation/generated/proxmox-plan.yaml
+- rc=0 --profile D0 --out /mnt/data/rvpi_cyber_range_config_v1.1/automation/generated/pfsense-D0.yml
+Wrote pfSense playbook: /mnt/data/rvpi_cyber_range_config_v1.1/automation/generated/pfsense-D0.yml
+Wrote manifest: /mnt/data/rvpi_cyber_range_config_v1.1/automation/generated/pfsense-D0.manifest.yaml
+- rc=0 --profile D1 --out /mnt/data/rvpi_cyber_range_config_v1.1/automation/generated/pfsense-D1.yml
+Wrote pfSense playbook: /mnt/data/rvpi_cyber_range_config_v1.1/automation/generated/pfsense-D1.yml
+Wrote manifest: /mnt/data/rvpi_cyber_range_config_v1.1/automation/generated/pfsense-D1.manifest.yaml
+- rc=0 --profile D2 --out /mnt/data/rvpi_cyber_range_config_v1.1/automation/generated/pfsense-D2.yml
+Wrote pfSense playbook: /mnt/data/rvpi_cyber_range_config_v1.1/automation/generated/pfsense-D2.yml
+Wrote manifest: /mnt/data/rvpi_cyber_range_config_v1.1/automation/generated/pfsense-D2.manifest.yaml
+- rc=0 --profile D3 --out /mnt/data/rvpi_cyber_range_config_v1.1/automation/generated/pfsense-D3.yml
+Wrote pfSense playbook: /mnt/data/rvpi_cyber_range_config_v1.1/automation/generated/pfsense-D3.yml
+Wrote manifest: /mnt/data/rvpi_cyber_range_config_v1.1/automation/generated/pfsense-D3.manifest.yaml
+- rc=0 resolve-experiment /mnt/data/rvpi_cyber_range_config_v1.1/experiments/exp1-template.yaml --out /mnt/data/rvpi_cyber_range_config_v1.1/automation/generated/resolved-experiment.yaml
+Wrote resolved experiment: /mnt/data/rvpi_cyber_range_config_v1.1/automation/generated/resolved-experiment.yaml
+
+Compile stderr:
+Spreadsheet runtime warmup failed during python startup
+Traceback (most recent call last):
+  File "/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/patches/warm_spreadsheet_runtime_on_startup.py", line 26, in warm_spreadsheet_runtime_on_startup
+  File "/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/spreadsheet_warmup.py", line 785, in warm_spreadsheet_runtime
+  File "/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/spreadsheet_warmup.py", line 720, in _warm_feature_flows
+  File "/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/spreadsheet_warmup.py", line 704, in _warm_collaboration_flows
+  File "/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/generated/interface/models.py", line 32317, in hydrate_crdt_from_proto
+  File "/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/rpc/remote.py", line 749, in __call__
+  File "/tmp/tmp.L2TH2Y5coc/artifact_tool_v2-2.8.22/artifact_tool/rpc/client.py", line 150, in call
+artifact_tool.rpc.client.RemoteError: hydrateCrdtFromProto requires an empty collaborative document.

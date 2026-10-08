@@ -1,0 +1,19 @@
+# Add these isolated bridges to the Proxmox node network configuration.
+# No physical port is attached: the cyber range remains host-local unless
+# you intentionally add a trunk later.
+
+auto vmbr-lab
+iface vmbr-lab inet manual
+    bridge-ports none
+    bridge-stp off
+    bridge-fd 0
+    bridge-vlan-aware yes
+    bridge-vids 2-4094
+    # RVPI experimental attack/data/control VLAN trunk
+
+auto vmbr-mirror
+iface vmbr-mirror inet manual
+    bridge-ports none
+    bridge-stp off
+    bridge-fd 0
+    # RVPI passive monitoring mirror destination

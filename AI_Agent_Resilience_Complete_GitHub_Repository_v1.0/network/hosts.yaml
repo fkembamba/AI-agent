@@ -1,0 +1,199 @@
+version: "1.0"
+
+hosts:
+  fw20:
+    role: perimeter_firewall
+    snapshot: clean-base
+    interfaces:
+      management:
+        network: management
+        ip: 10.10.10.20
+      external:
+        network: n0_external
+        ip: 172.16.100.1
+      dmz_transit:
+        network: n1_dmz
+        ip: 10.10.30.1
+
+  fw21:
+    role: segmentation_firewall
+    snapshot: clean-base
+    interfaces:
+      management:
+        network: management
+        ip: 10.10.10.21
+      dmz:
+        network: n1_dmz
+        ip: 10.10.30.254
+      internal:
+        network: n2_internal
+        ip: 10.10.40.1
+      protected:
+        network: n3_protected
+        ip: 10.10.50.1
+      backup:
+        network: s1_backup
+        ip: 10.10.60.1
+
+  web01:
+    role: web_server
+    snapshot: clean-base
+    interfaces:
+      data:
+        network: n1_dmz
+        ip: 10.10.30.10
+        gateway: 10.10.30.254
+
+  mail01:
+    role: mail_server
+    snapshot: clean-base
+    interfaces:
+      data:
+        network: n1_dmz
+        ip: 10.10.30.13
+        gateway: 10.10.30.254
+
+  user01:
+    role: workstation
+    snapshot: clean-domain
+    domain_member: true
+    interfaces:
+      data:
+        network: n2_internal
+        ip: 10.10.40.11
+        gateway: 10.10.40.1
+
+  user02:
+    role: workstation
+    snapshot: clean-domain
+    domain_member: true
+    interfaces:
+      data:
+        network: n2_internal
+        ip: 10.10.40.12
+        gateway: 10.10.40.1
+
+  user03:
+    role: workstation
+    snapshot: clean-domain
+    domain_member: true
+    interfaces:
+      data:
+        network: n2_internal
+        ip: 10.10.40.13
+        gateway: 10.10.40.1
+
+  app01:
+    role: application_server
+    snapshot: clean-domain
+    domain_member: true
+    interfaces:
+      data:
+        network: n2_internal
+        ip: 10.10.40.20
+        gateway: 10.10.40.1
+
+  file01:
+    role: file_server
+    snapshot: clean-domain
+    domain_member: true
+    interfaces:
+      data:
+        network: n2_internal
+        ip: 10.10.40.30
+        gateway: 10.10.40.1
+
+  dc01:
+    roles:
+      - domain_controller
+      - dns
+      - identity_service
+    snapshot: clean-domain
+    interfaces:
+      data:
+        network: n3_protected
+        ip: 10.10.50.10
+        gateway: 10.10.50.1
+
+  db01:
+    role: database_server
+    snapshot: clean-domain
+    domain_member: true
+    critical_asset: true
+    interfaces:
+      data:
+        network: n3_protected
+        ip: 10.10.50.20
+        gateway: 10.10.50.1
+
+  backup01:
+    roles:
+      - backup_server
+      - recovery_service
+    snapshot: clean-base
+    critical_asset: true
+    interfaces:
+      data:
+        network: s1_backup
+        ip: 10.10.60.15
+        gateway: 10.10.60.1
+
+  caldera01:
+    role: experiment_orchestrator
+    snapshot: clean-control
+    attack_target: false
+    interfaces:
+      control:
+        network: management
+        ip: 10.10.10.10
+
+  experiment01:
+    role: experiment_controller
+    snapshot: clean-control
+    attack_target: false
+    interfaces:
+      control:
+        network: management
+        ip: 10.10.10.11
+
+  agentctrl01:
+    role: ai_agent_controller
+    snapshot: clean-control
+    attack_target: false
+    interfaces:
+      control:
+        network: management
+        ip: 10.10.10.12
+
+  zeek01:
+    role: passive_sensor
+    snapshot: clean-sensor
+    attack_target: false
+    interfaces:
+      management:
+        network: telemetry
+        ip: 10.10.70.11
+      monitor:
+        network: n0_external
+        ip: null
+
+  zeek02:
+    role: passive_sensor
+    snapshot: clean-sensor
+    attack_target: false
+    interfaces:
+      management:
+        network: telemetry
+        ip: 10.10.70.12
+      monitor:
+        network: n2_internal
+        ip: null
+
+  log01:
+    role: log_collector
+    snapshot: clean-sensor
+    attack_target: false
+    interfaces:
+      management:
+        network: telemetry
+        ip: 10.10.70.20

@@ -1,0 +1,71 @@
+version: "1.0"
+
+restore_profile:
+  id: baseline-v1
+  name: clean-experiment-baseline
+  description: "Return the cyber range to a known state before each experimental run."
+
+shutdown_before_restore: true
+
+restore_order:
+  - phase: infrastructure
+    hosts: [fw20, fw21, dc01]
+
+  - phase: servers
+    hosts: [web01, mail01, app01, file01, db01, backup01]
+
+  - phase: clients
+    hosts: [user01, user02, user03]
+
+  - phase: control
+    hosts: [caldera01, experiment01, agentctrl01]
+
+  - phase: telemetry
+    hosts: [zeek01, zeek02, log01]
+
+snapshot_map:
+  fw20: clean-base
+  fw21: clean-base
+  dc01: clean-domain
+  web01: clean-base
+  mail01: clean-base
+  app01: clean-domain
+  file01: clean-domain
+  db01: clean-domain
+  backup01: clean-base
+  user01: clean-domain
+  user02: clean-domain
+  user03: clean-domain
+  caldera01: clean-control
+  experiment01: clean-control
+  agentctrl01: clean-control
+  zeek01: clean-sensor
+  zeek02: clean-sensor
+  log01: clean-sensor
+
+post_restore:
+  boot_wait_seconds: 60
+
+  required_checks:
+    - vm_power_state
+    - interface_assignment
+    - ip_address
+    - default_gateway
+    - route_table
+    - dns_resolution
+    - domain_controller_health
+    - domain_membership
+    - firewall_profile_loaded
+    - telemetry_sensor_ready
+    - clock_synchronization
+    - control_plane_isolation
+
+  clear_experiment_state:
+    caldera_operations: true
+    agent_memory: true
+    experiment_controller_cache: true
+    telemetry_run_cache: true
+
+failure_policy:
+  on_failed_check: abort_run
+  preserve_logs: true

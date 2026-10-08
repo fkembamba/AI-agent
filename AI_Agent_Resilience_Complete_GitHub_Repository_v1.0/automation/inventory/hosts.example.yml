@@ -1,0 +1,19 @@
+all:
+  children:
+    pfsense:
+      children:
+        fw20:
+          hosts:
+            fw20.lab:
+              ansible_host: 10.10.10.20
+        fw21:
+          hosts:
+            fw21.lab:
+              ansible_host: 10.10.10.21
+      vars:
+        # Prefer a dedicated automation account with only the privileges
+        # needed to manage the lab firewall configuration.
+        ansible_user: ansible
+        # Set ansible_python_interpreter only if auto-discovery fails.
+        # Example for some pfSense releases:
+        # ansible_python_interpreter: /usr/local/bin/python3.11

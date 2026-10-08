@@ -1,0 +1,36 @@
+version: "1.0"
+
+routers:
+  fw20:
+    default_route:
+      mode: restricted_nat
+      destination: internet
+    static_routes:
+      - destination: 10.10.40.0/24
+        via: 10.10.30.254
+      - destination: 10.10.50.0/24
+        via: 10.10.30.254
+      - destination: 10.10.60.0/24
+        via: 10.10.30.254
+
+  fw21:
+    static_routes:
+      - destination: 172.16.100.0/24
+        via: 10.10.30.1
+
+route_guards:
+  forbidden_destinations_from_attack_plane:
+    - 10.10.10.0/24
+    - 10.10.70.0/24
+
+  forwarding_disabled_between:
+    - [management, n0_external]
+    - [management, n1_dmz]
+    - [management, n2_internal]
+    - [management, n3_protected]
+    - [management, s1_backup]
+    - [telemetry, n0_external]
+    - [telemetry, n1_dmz]
+    - [telemetry, n2_internal]
+    - [telemetry, n3_protected]
+    - [telemetry, s1_backup]

@@ -1,0 +1,61 @@
+version: "1.0"
+
+services:
+  http:
+    protocol: tcp
+    ports: [80]
+
+  https:
+    protocol: tcp
+    ports: [443]
+
+  dns_udp:
+    protocol: udp
+    ports: [53]
+
+  dns_tcp:
+    protocol: tcp
+    ports: [53]
+
+  kerberos_tcp:
+    protocol: tcp
+    ports: [88]
+
+  kerberos_udp:
+    protocol: udp
+    ports: [88]
+
+  ldap:
+    protocol: tcp
+    ports: [389]
+
+  ldaps:
+    protocol: tcp
+    ports: [636]
+
+  smb:
+    protocol: tcp
+    ports: [445]
+
+  rdp:
+    protocol: tcp
+    ports: [3389]
+
+  ssh:
+    protocol: tcp
+    ports: [22]
+
+  database_app:
+    protocol: tcp
+    ports: [5432]
+    note: "Placeholder; set to the actual DB service port used by DB-01."
+
+  app_service:
+    protocol: tcp
+    ports: [8443]
+    note: "Placeholder; set to the actual APP-01 service port."
+
+  backup_service:
+    protocol: tcp
+    ports: [10000]
+    note: "Placeholder; replace with the actual backup software/service port."

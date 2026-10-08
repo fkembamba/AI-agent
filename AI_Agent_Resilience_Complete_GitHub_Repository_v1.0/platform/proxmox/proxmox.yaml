@@ -1,0 +1,63 @@
+version: "1.0"
+
+platform:
+  type: proxmox-ve
+  api:
+    host_env: PROXMOX_HOST
+    user_env: PROXMOX_USER
+    token_id_env: PROXMOX_TOKEN_ID
+    token_secret_env: PROXMOX_TOKEN_SECRET
+    verify_ssl_env: PROXMOX_VERIFY_SSL
+  node_env: PROXMOX_NODE
+
+switching:
+  attack_bridge:
+    name: vmbr-lab
+    type: linux_bridge
+    vlan_aware: true
+    physical_ports: []
+    host_ip: null
+    comment: "Isolated VLAN-aware bridge for the experimental attack/data plane."
+
+  mirror_bridge:
+    name: vmbr-mirror
+    type: linux_bridge
+    vlan_aware: false
+    physical_ports: []
+    host_ip: null
+    comment: "Isolated destination bridge for passive sensor mirror NICs."
+
+network_map:
+  management:
+    bridge: vmbr-lab
+    vlan_tag: 10
+  n0_external:
+    bridge: vmbr-lab
+    vlan_tag: 20
+  n1_dmz:
+    bridge: vmbr-lab
+    vlan_tag: 30
+  n2_internal:
+    bridge: vmbr-lab
+    vlan_tag: 40
+  n3_protected:
+    bridge: vmbr-lab
+    vlan_tag: 50
+  s1_backup:
+    bridge: vmbr-lab
+    vlan_tag: 60
+  telemetry:
+    bridge: vmbr-lab
+    vlan_tag: 70
+  mirror:
+    bridge: vmbr-mirror
+    vlan_tag: null
+
+vm_discovery:
+  mode: by_name
+  require_unique_name: true
+
+snapshot:
+  mode: rollback
+  wait_for_task_completion: true
+  timeout_seconds: 600

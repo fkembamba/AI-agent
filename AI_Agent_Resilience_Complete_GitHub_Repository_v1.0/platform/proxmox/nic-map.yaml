@@ -1,0 +1,118 @@
+version: "1.0"
+
+# Logical VM names must match Proxmox VM names unless overridden here.
+# netX values are fixed so mirrored firewall interfaces remain predictable.
+
+vms:
+  fw20:
+    proxmox_name: fw20
+    nics:
+      net0: {network: management, model: virtio}
+      net1: {network: n0_external, model: virtio}
+      net2: {network: n1_dmz, model: virtio}
+
+  fw21:
+    proxmox_name: fw21
+    nics:
+      net0: {network: management, model: virtio}
+      net1: {network: n1_dmz, model: virtio}
+      net2: {network: n2_internal, model: virtio}
+      net3: {network: n3_protected, model: virtio}
+      net4: {network: s1_backup, model: virtio}
+
+  web01:
+    proxmox_name: web01
+    nics:
+      net0: {network: n1_dmz, model: virtio}
+
+  mail01:
+    proxmox_name: mail01
+    nics:
+      net0: {network: n1_dmz, model: virtio}
+
+  user01:
+    proxmox_name: user01
+    nics:
+      net0: {network: n2_internal, model: virtio}
+
+  user02:
+    proxmox_name: user02
+    nics:
+      net0: {network: n2_internal, model: virtio}
+
+  user03:
+    proxmox_name: user03
+    nics:
+      net0: {network: n2_internal, model: virtio}
+
+  app01:
+    proxmox_name: app01
+    nics:
+      net0: {network: n2_internal, model: virtio}
+
+  file01:
+    proxmox_name: file01
+    nics:
+      net0: {network: n2_internal, model: virtio}
+
+  dc01:
+    proxmox_name: dc01
+    nics:
+      net0: {network: n3_protected, model: virtio}
+
+  db01:
+    proxmox_name: db01
+    nics:
+      net0: {network: n3_protected, model: virtio}
+
+  backup01:
+    proxmox_name: backup01
+    nics:
+      net0: {network: s1_backup, model: virtio}
+
+  caldera01:
+    proxmox_name: caldera01
+    nics:
+      net0: {network: management, model: virtio}
+
+  experiment01:
+    proxmox_name: experiment01
+    nics:
+      net0: {network: management, model: virtio}
+
+  agentctrl01:
+    proxmox_name: agentctrl01
+    nics:
+      net0: {network: management, model: virtio}
+
+  zeek01:
+    proxmox_name: zeek01
+    nics:
+      net0: {network: telemetry, model: virtio}
+      net1: {network: mirror, model: virtio, ip: null, promiscuous: true}
+
+  zeek02:
+    proxmox_name: zeek02
+    nics:
+      net0: {network: telemetry, model: virtio}
+      net1: {network: mirror, model: virtio, ip: null, promiscuous: true}
+
+  log01:
+    proxmox_name: log01
+    nics:
+      net0: {network: telemetry, model: virtio}
+
+mirrors:
+  - id: perimeter
+    source_vm: fw20
+    source_nic: net1
+    destination_vm: zeek01
+    destination_nic: net1
+    directions: [ingress, egress]
+
+  - id: protected_boundary
+    source_vm: fw21
+    source_nic: net3
+    destination_vm: zeek02
+    destination_nic: net1
+    directions: [ingress, egress]

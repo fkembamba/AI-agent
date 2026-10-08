@@ -1,0 +1,34 @@
+version: "1.0"
+
+platform:
+  type: pfsense-ce
+  automation: pfsensible.core
+
+firewalls:
+  fw20:
+    ansible_host_group: fw20
+    management_ip: 10.10.10.20
+    interfaces:
+      management: opt1
+      n0_external: wan
+      n1_dmz: lan
+    note: "Expected NIC order: net0=management, net1=N0, net2=N1. Verify logical pfSense interface assignment after installation."
+
+  fw21:
+    ansible_host_group: fw21
+    management_ip: 10.10.10.21
+    interfaces:
+      management: opt3
+      n1_dmz: wan
+      n2_internal: lan
+      n3_protected: opt1
+      s1_backup: opt2
+    note: "Expected NIC order: net0=management, net1=N1, net2=N2, net3=N3, net4=S1. Verify logical pfSense interface assignment after installation."
+
+safety:
+  managed_rule_prefix: "RVPI-"
+  preserve_non_rvpi_rules: true
+  block_control_planes_first: true
+  control_plane_networks:
+    management: 10.10.10.0/24
+    telemetry: 10.10.70.0/24

@@ -1,0 +1,38 @@
+version: "1.0"
+
+profile:
+  id: D0
+  name: Flat
+  description: "Broad enterprise attack-plane connectivity baseline. Management and telemetry remain isolated."
+
+policy:
+  default_action: allow
+
+  protected_networks:
+    - management
+    - telemetry
+
+  explicit_denies:
+    - from: "*"
+      to: management
+    - from: "*"
+      to: telemetry
+    - from: management
+      to: "*"
+      exception: orchestration_only
+    - from: telemetry
+      to: "*"
+      exception: passive_collection_only
+
+  perimeter:
+    default_action: deny
+    rules:
+      - from: n0_external
+        to_host: web01
+        services: [http, https]
+      - from: n0_external
+        to_host: mail01
+        services: [https]
+
+  enterprise_interzone:
+    default_action: allow

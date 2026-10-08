@@ -1,0 +1,67 @@
+version: "1.0"
+
+lab:
+  id: rvpi-agent-resilience-range
+  name: "RVPI Coordinated Autonomous AI Agent Resilience Cyber Range"
+  timezone: UTC
+
+networks:
+  management:
+    vlan: 10
+    subnet: 10.10.10.0/24
+    attack_plane: false
+    routable_from_attack_plane: false
+    internet_access: false
+    purpose: experiment_control
+
+  n0_external:
+    vlan: 20
+    subnet: 172.16.100.0/24
+    gateway: 172.16.100.1
+    attack_plane: true
+    internet_access: restricted_nat
+    purpose: simulated_external_attacker
+
+  n1_dmz:
+    vlan: 30
+    subnet: 10.10.30.0/24
+    gateway: 10.10.30.254
+    attack_plane: true
+    internet_access: false
+    purpose: public_facing_services
+
+  n2_internal:
+    vlan: 40
+    subnet: 10.10.40.0/24
+    gateway: 10.10.40.1
+    attack_plane: true
+    internet_access: false
+    purpose: users_and_internal_services
+
+  n3_protected:
+    vlan: 50
+    subnet: 10.10.50.0/24
+    gateway: 10.10.50.1
+    attack_plane: true
+    internet_access: false
+    purpose: identity_database_and_critical_assets
+
+  s1_backup:
+    vlan: 60
+    subnet: 10.10.60.0/24
+    gateway: 10.10.60.1
+    attack_plane: true
+    internet_access: false
+    purpose: recovery_and_backup_enclave
+
+  telemetry:
+    vlan: 70
+    subnet: 10.10.70.0/24
+    attack_plane: false
+    routable_from_attack_plane: false
+    internet_access: false
+    purpose: passive_monitoring_and_log_collection
+
+protected_control_planes:
+  - management
+  - telemetry

@@ -1,0 +1,5 @@
+YAML syntax validation
+PyYAML available: True
+Files parsed: 11
+Errors: 0
+Status: PASS

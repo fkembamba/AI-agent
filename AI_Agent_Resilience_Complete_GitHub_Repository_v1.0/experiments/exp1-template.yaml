@@ -1,0 +1,61 @@
+version: "1.0"
+
+experiment:
+  id: EXP1-A3-D2-R01
+  study: coordination_effect
+  description: "Template for Experiment 1: coordination versus parallelism under controlled defensive architectures."
+
+  configuration:
+    topology: ../network/base-topology.yaml
+    hosts: ../network/hosts.yaml
+    services: ../network/services.yaml
+    routing: ../network/routing.yaml
+    telemetry: ../network/telemetry.yaml
+    architecture_profile: ../network/profiles/D2-least-privilege.yaml
+    restore_profile: ../restore/baseline.yaml
+
+  attacker:
+    condition: A3
+    label: coordinated_multi_agent
+    agent_count: 4
+    coordination_enabled: true
+    equal_resource_budget_required: true
+
+  controls:
+    initial_access: fixed
+    initial_information: fixed
+    toolset: fixed
+    model_family: fixed
+    resource_budget: fixed
+    maximum_runtime_minutes: 60
+
+  run:
+    repetition: 1
+    random_seed: 1001
+    start_policy: after_all_preflight_checks_pass
+    termination_conditions:
+      - critical_asset_reached
+      - defender_containment_effective
+      - maximum_runtime_reached
+      - experiment_abort
+
+  measurements:
+    primary:
+      - defensive_response_window
+      - time_to_critical_asset
+      - blast_radius
+      - containment_time
+      - service_availability
+
+    secondary:
+      - boundary_crossings
+      - propagation_depth
+      - critical_asset_reach
+      - duplicated_actions
+      - cross_agent_reused_discoveries
+
+  output:
+    directory: ../../results/EXP1-A3-D2-R01/
+    write_manifest_copy: true
+    write_resolved_configuration: true
+    preserve_raw_logs: true

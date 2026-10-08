@@ -1,0 +1,48 @@
+version: "1.0"
+
+profile:
+  id: D3
+  name: Microsegmented / Zero-Trust Style
+  description: "D2 controls plus explicit host-to-host and service-level authorization."
+
+extends: D2
+
+microsegmentation:
+  default_action: deny
+
+  allowed_flows:
+    - id: D3-001
+      sources: [user01, user02, user03]
+      destination: app01
+      services: [https]
+
+    - id: D3-002
+      source: web01
+      destination: app01
+      services: [app_service]
+
+    - id: D3-003
+      source: app01
+      destination: db01
+      services: [database_app]
+
+    - id: D3-004
+      sources: [user01, user02, user03, app01, file01, db01]
+      destination: dc01
+      services:
+        - dns_udp
+        - dns_tcp
+        - kerberos_tcp
+        - kerberos_udp
+        - ldap
+        - ldaps
+
+    - id: D3-005
+      source: backup01
+      destinations: [file01, db01]
+      services: [backup_service]
+
+  east_west:
+    workstation_to_workstation: deny
+    workstation_to_server: explicit_allow_only
+    server_to_server: explicit_allow_only

@@ -1,0 +1,43 @@
+version: "1.0"
+
+profile:
+  id: D2
+  name: Segmented + Least Privilege
+  description: "D1 segmentation plus constrained identity and administrative privilege."
+
+extends: D1
+
+network_policy:
+  inherit: true
+
+identity_policy:
+  default_action: deny
+
+  allowed_relationships:
+    - id: D2-ID-001
+      source_roles: [workstation, application_server, file_server, database_server]
+      destination_host: dc01
+      purposes: [dns, domain_authentication]
+
+    - id: D2-ID-002
+      source_host: app01
+      destination_host: db01
+      purposes: [application_database_access]
+
+    - id: D2-ID-003
+      source_host: backup01
+      destination_hosts: [file01, db01]
+      purposes: [backup]
+
+privilege_policy:
+  local_admin_reuse: false
+  workstation_admin_to_server: false
+  service_accounts:
+    scoped: true
+    interactive_logon: false
+  administrative_accounts:
+    tiered: true
+    separate_from_standard_user_accounts: true
+  remote_administration:
+    default_action: deny
+    approved_sources: []

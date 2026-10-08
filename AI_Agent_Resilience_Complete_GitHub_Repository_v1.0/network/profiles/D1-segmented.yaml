@@ -1,0 +1,56 @@
+version: "1.0"
+
+profile:
+  id: D1
+  name: Segmented
+  description: "Zone-based segmentation with default-deny inter-zone policy."
+
+policy:
+  default_action: deny
+
+  protected_networks:
+    - management
+    - telemetry
+
+  rules:
+    - id: D1-001
+      from: n0_external
+      to_host: web01
+      services: [http, https]
+
+    - id: D1-002
+      from: n0_external
+      to_host: mail01
+      services: [https]
+
+    - id: D1-010
+      from_host: web01
+      to_host: app01
+      services: [app_service]
+
+    - id: D1-020
+      from: n2_internal
+      to_host: dc01
+      services:
+        - dns_udp
+        - dns_tcp
+        - kerberos_tcp
+        - kerberos_udp
+        - ldap
+        - ldaps
+
+    - id: D1-030
+      from_host: app01
+      to_host: db01
+      services: [database_app]
+
+    - id: D1-040
+      from_host: backup01
+      to_hosts: [file01, db01]
+      services: [backup_service]
+
+  explicit_denies:
+    - from: "*"
+      to: management
+    - from: "*"
+      to: telemetry
